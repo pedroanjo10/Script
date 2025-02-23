@@ -1,0 +1,138 @@
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+
+local espEnabled = true  -- Definido como "true" para ativar ESP automaticamente
+
+-- Função para ativar/desativar o ESP (visibilidade dos outros jogadores)
+local function toggleESP()
+    if espEnabled then
+        -- Adiciona uma linha visível conectando o jogador ao outro jogador
+        for _, otherPlayer in pairs(game.Players:GetPlayers()) do
+            if otherPlayer ~= player and otherPlayer.Character then
+                local otherCharacter = otherPlayer.Character
+                local humanoidRootPart = otherCharacter:FindFirstChild("HumanoidRootPart")
+                if humanoidRootPart then
+                    local line = Instance.new("LineHandleAdornment")
+                    line.Parent = otherCharacter
+                    line.Adornee = humanoidRootPart
+                    line.Color3 = Color3.fromRGB(255, 0, 0)  -- Linha vermelha
+                    line.Thickness = 0.2  -- Espessura da linha
+                    line.ZIndex = 10  -- Garante que a linha fique visível
+                    line.Visible = true
+                    line.Name = "ESP_Line"
+                    otherCharacter:SetAttribute("ESP_Line", line)  -- Armazenando a linha no atributo do personagem
+                end
+            end
+        end
+    end
+end
+
+-- Função para modificar as hitboxes
+local function modifyHitboxes()
+    -- Torna a hitbox do jogador com tamanho 1x1x1 e sem colisão
+    for _, v in pairs(character:GetChildren()) do
+        if v:IsA("BasePart") then
+            v.Size = Vector3.new(1, 1, 1)  -- Torna a hitbox quadrada
+            v.Transparency = 0             -- Torna a hitbox visível para o próprio jogador
+            v.CanCollide = false           -- Remove a colisão da hitbox
+        end
+    end
+
+    -- Modifica as hitboxes dos outros jogadores, tornando elas com tamanho 50 e sem colisão
+    for _, otherPlayer in pairs(game.Players:GetPlayers()) do
+        if otherPlayer ~= player then
+            local otherCharacter = otherPlayer.Character
+            if otherCharacter then
+                for _, v in pairs(otherCharacter:GetChildren()) do
+                    if v:IsA("BasePart") then
+                        v.Size = Vector3.new(50, 50, 50)  -- Define o tamanho das hitboxes dos outros para 50
+                        v.Transparency = 1                 -- Torna as hitboxes invisíveis para os outros jogadores
+                        v.CanCollide = false               -- Remove a colisão das hitboxes dos outros jogadores
+                    end
+                end
+            end
+        end
+    end
+end
+
+-- Função para remover cooldowns de habilidades
+local function removeCooldown()
+    for _, v in pairs(getgc(true)) do
+        if type(v) == "function" and islclosure(v) then
+            local constants = debug.getconstants(v)
+            for _, c in pairs(constants) do
+                if type(c) == "number" and c > 0 then -- Verifica se há tempos de recarga
+                    debug.setupvalue(v, 1, 0)  -- Define o cooldown como zero
+                end
+            end
+        end
+    end
+end
+
+-- Função para alterar a velocidade do jogador
+local function changeSpeed()
+    local humanoid = character:FindFirstChild("Humanoid")
+    if humanoid then
+        humanoid.WalkSpeed = 65  -- Define a velocidade de movimento para 65
+    end
+end
+
+-- Função para alterar a vida do jogador para 1.000.000
+local function setHealthToMax()
+    local humanoid = character:FindFirstChild("Humanoid")
+    if humanoid then
+        humanoid.Health = 1000000  -- Define a vida para 1.000.000
+    end
+end
+
+-- Função para dar 100 de dano a todos os outros jogadores
+local function dealDamageToAll()
+    for _, otherPlayer in pairs(game.Players:GetPlayers()) do
+        if otherPlayer ~= player and otherPlayer.Character then
+            local otherCharacter = otherPlayer.Character
+            local humanoid = otherCharacter:FindFirstChild("Humanoid")
+            if humanoid then
+                humanoid:TakeDamage(100)  -- Dá 100 de dano
+            end
+        end
+    end
+end
+
+-- Função para exibir uma notificação
+local function showNotification()
+    game.StarterGui:SetCore("SendNotification", {
+        Title = "Aviso";
+        Text = "Se inscreva no canal do @pedroanjoyt!";
+        Duration = 60;  -- Duração da notificação em segundos
+    })
+end
+
+-- Criar os botões da UI
+local screenGui = Instance.new("ScreenGui")
+screenGui.Parent = player:WaitForChild("PlayerGui")
+
+-- Função para criar um botão
+local function createButton(name, position, func)
+    local button = Instance.new("TextButton")
+    button.Name = name
+    button.Size = UDim2.new(0, 200, 0, 50)
+    button.Position = position
+    button.Text = name
+    button.Parent = screenGui
+    button.BackgroundColor3 = Color3.fromRGB(0, 255, 0)  -- Cor do botão (verde)
+    button.TextColor3 = Color3.fromRGB(255, 255, 255)   -- Cor do texto (branco)
+
+    button.MouseButton1Click:Connect(func)  -- Conecta a função ao clique do botão
+end
+
+-- Criar botões para ativar as funções
+createButton("Modificar Hitbox", UDim2.new(0, 10, 0, 10), modifyHitboxes)
+createButton("Remover Cooldown", UDim2.new(0, 10, 0, 70), removeCooldown)
+createButton("Alterar Velocidade", UDim2.new(0, 10, 0, 130), changeSpeed)
+createButton("Alterar Vida", UDim2.new(0, 10, 0, 190), setHealthToMax)
+createButton("Dar Dano em Todos", UDim2.new(0, 10, 0, 250), dealDamageToAll)
+createButton("Ativar ESP", UDim2.new(0, 10, 0, 310), toggleESP)
+createButton("Mostrar Notificação", UDim2.new(0, 10, 0, 370), showNotification)
+
+-- Mensagem no console
+print("Botões da UI criados. Funções disponíveis.")

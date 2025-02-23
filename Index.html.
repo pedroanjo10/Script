@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Controles do Jogo Roblox</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #2e2e2e;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+        .button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>Controles do Jogo Roblox</h1>
+    <div>
+        <button class="button" onclick="modifyHitboxes()">Modificar Hitbox</button>
+        <button class="button" onclick="removeCooldown()">Remover Cooldown</button>
+        <button class="button" onclick="changeSpeed()">Alterar Velocidade</button>
+        <button class="button" onclick="setHealthToMax()">Alterar Vida</button>
+        <button class="button" onclick="dealDamageToAll()">Dar Dano em Todos</button>
+        <button class="button" onclick="toggleESP()">Ativar ESP</button>
+        <button class="button" onclick="showNotification()">Mostrar Notificação</button>
+    </div>
+
+    <script>
+        // Funções do Roblox - Aqui apenas mockup (não funcional sem o Roblox)
+        function modifyHitboxes() {
+            alert("Hitbox modificada!");
+            // Chame a função correspondente do Roblox aqui
+        }
+
+        function removeCooldown() {
+            alert("Cooldown removido!");
+            // Chame a função correspondente do Roblox aqui
+        }
+
+        function changeSpeed() {
+            alert("Velocidade alterada para 65!");
+            // Chame a função correspondente do Roblox aqui
+        }
+
+        function setHealthToMax() {
+            alert("Vida alterada para 1.000.000!");
+            // Chame a função correspondente do Roblox aqui
+        }
+
+        function dealDamageToAll() {
+            alert("Dano de 100 causado a todos!");
+            // Chame a função correspondente do Roblox aqui
+        }
+
+        function toggleESP() {
+            alert("ESP ativado!");
+            // Chame a função correspondente do Roblox aqui
+        }
+
+        function showNotification() {
+            alert("Se inscreva no canal do @pedroanjoyt!");
+            // Chame a função correspondente do Roblox aqui
+        }
+    </script>
+</body>
+</html>
